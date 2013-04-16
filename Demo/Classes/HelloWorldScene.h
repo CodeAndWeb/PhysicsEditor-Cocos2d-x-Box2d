@@ -11,6 +11,7 @@
 // When you import this file, you import all the cocos2d classes
 #include "cocos2d.h"
 #include "Box2D.h"
+#include "GLES-Render.h"
 
 class HelloWorld : public cocos2d::CCLayer {
 public:
@@ -24,10 +25,11 @@ public:
     void addNewSpriteWithCoords(cocos2d::CCPoint p);
     virtual void draw();
     virtual void ccTouchesEnded(cocos2d::CCSet* touches, cocos2d::CCEvent* event);
-    void tick(cocos2d::ccTime dt);
+    void tick(float dt);
     
 private:
     b2World* world;
+    GLESDebugDraw *m_debugDraw;
 };
 
 #endif // __HELLO_WORLD_H__

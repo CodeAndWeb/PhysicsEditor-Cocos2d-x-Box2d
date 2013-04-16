@@ -25,8 +25,8 @@ HelloWorld::HelloWorld()
     // load physics shapes
     GB2ShapeCache::sharedGB2ShapeCache()->addShapesWithFile("shapedefs.plist");
     
-	setIsTouchEnabled( true );
-	setIsAccelerometerEnabled( true );
+	setTouchEnabled( true );
+	setAccelerometerEnabled( true );
     
 	CCSize screenSize = CCDirector::sharedDirector()->getWinSize();
 	//UXLOG(L"Screen width %0.2f screen height %0.2f",screenSize.width,screenSize.height);
@@ -43,18 +43,18 @@ HelloWorld::HelloWorld()
     world->SetAllowSleeping(doSleep);    
 	world->SetContinuousPhysics(true);
     
-    /*	
+    	
      m_debugDraw = new GLESDebugDraw( PTM_RATIO );
      world->SetDebugDraw(m_debugDraw);
      
-     uint flags = 0;
-     flags += b2DebugDraw::e_shapeBit;
-     flags += b2DebugDraw::e_jointBit;
-     flags += b2DebugDraw::e_aabbBit;
-     flags += b2DebugDraw::e_pairBit;
-     flags += b2DebugDraw::e_centerOfMassBit;
-     m_debugDraw->SetFlags(flags);		
-     */
+    uint32 flags = 0;
+    flags += b2Draw::e_shapeBit;
+    flags += b2Draw::e_jointBit;
+    //        flags += b2Draw::e_aabbBit;
+    //        flags += b2Draw::e_pairBit;
+    //        flags += b2Draw::e_centerOfMassBit;
+    m_debugDraw->SetFlags(flags);
+    
 	
 	b2BodyDef groundBodyDef;
 	groundBodyDef.position.Set(screenSize.width/2/PTM_RATIO, 
@@ -86,12 +86,12 @@ HelloWorld::HelloWorld()
     
 	
 	//Set up sprite
-	CCSpriteBatchNode *mgr = CCSpriteBatchNode::batchNodeWithFile("blocks.png", 150);
+	CCSpriteBatchNode *mgr = CCSpriteBatchNode::create("blocks.png", 150);
 	addChild(mgr, 0, kTagSpriteManager);
 	
 	addNewSpriteWithCoords( CCPointMake(screenSize.width/2, screenSize.height/2) );
 	
-	CCLabelTTF *label = CCLabelTTF::labelWithString("Tap screen", "Marker Felt", 32);
+	CCLabelTTF *label = CCLabelTTF::create("Tap screen", "Marker Felt", 32);
 	addChild(label, 0);
 	label->setColor( ccc3(0,0,255) );
 	label->setPosition( CCPointMake( screenSize.width/2, screenSize.height-50) );
@@ -109,20 +109,22 @@ HelloWorld::~HelloWorld()
 
 void HelloWorld::draw()
 {
-	// Default GL states: GL_TEXTURE_2D, GL_VERTEX_ARRAY, GL_COLOR_ARRAY, GL_TEXTURE_COORD_ARRAY
-	// Needed states:  GL_VERTEX_ARRAY, 
-	// Unneeded states: GL_TEXTURE_2D, GL_COLOR_ARRAY, GL_TEXTURE_COORD_ARRAY
-	glDisable(GL_TEXTURE_2D);
-	glDisableClientState(GL_COLOR_ARRAY);
-	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-	
-	//world->DrawDebugData();
-	
-	// restore default GL states
-	glEnable(GL_TEXTURE_2D);
-	glEnableClientState(GL_COLOR_ARRAY);
-	glEnableClientState(GL_TEXTURE_COORD_ARRAY);	
+    //
+    // IMPORTANT:
+    // This is only for debug purposes
+    // It is recommend to disable it
+    //
+    CCLayer::draw();
+    
+    ccGLEnableVertexAttribs( kCCVertexAttribFlag_Position );
+    
+    kmGLPushMatrix();
+    
+    world->DrawDebugData();
+    
+    kmGLPopMatrix();
 }
+
 
 string names[] = {
     "hotdog",
@@ -138,7 +140,7 @@ void HelloWorld::addNewSpriteWithCoords(CCPoint p)
 {
     string name = names[rand()%7];
     
-    CCSprite *sprite = CCSprite::spriteWithFile((name+".png").c_str());
+    CCSprite *sprite = CCSprite::create((name+".png").c_str());
     
     sprite->setPosition(p);
     
@@ -159,7 +161,7 @@ void HelloWorld::addNewSpriteWithCoords(CCPoint p)
 }
 
 
-void HelloWorld::tick(ccTime dt)
+void HelloWorld::tick(float dt)
 {
 	//It is recommended that a fixed time step is used with Box2D for stability
 	//of the simulation, however, we are using a variable time step here.
@@ -198,7 +200,7 @@ void HelloWorld::ccTouchesEnded(CCSet* touches, CCEvent* event)
 		if(!touch)
 			break;
         
-		CCPoint location = touch->locationInView(touch->view());
+		CCPoint location = touch->getLocationInView();
 		
 		location = CCDirector::sharedDirector()->convertToGL(location);
         
@@ -209,7 +211,7 @@ void HelloWorld::ccTouchesEnded(CCSet* touches, CCEvent* event)
 CCScene* HelloWorld::scene()
 {
     // 'scene' is an autorelease object
-    CCScene *scene = CCScene::node();
+    CCScene *scene = CCScene::create();
     
     // add layer as a child to scene
     CCLayer* layer = new HelloWorld();
