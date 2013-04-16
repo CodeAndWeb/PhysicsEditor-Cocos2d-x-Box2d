@@ -1,9 +1,9 @@
 //
-//  DemoAppController.h
-//  Demo
+//  MonkeyJump2DAppController.h
+//  MonkeyJump2D
 //
-//  Created by Andreas Löw on 11.01.12.
-//  Copyright codeandweb.de 2012. All rights reserved.
+//  Created by guanghui on 4/16/13.
+//  Copyright __MyCompanyName__ 2013. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>

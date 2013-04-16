@@ -27,7 +27,12 @@ THE SOFTWARE.
 
 #include "CCPlatformMacros.h"
 
-NS_CC_BEGIN;
+NS_CC_BEGIN
+
+/**
+ * @addtogroup platform
+ * @{
+ */
 
 /// The max length of CCLog message.
 static const int kMaxLogLen = 16*1024;
@@ -40,11 +45,7 @@ void CC_DLL CCLog(const char * pszFormat, ...);
 /**
  * lua can not deal with ...
  */
-inline void CC_DLL CCLuaLog(const char * pszFormat)
-{
-	CCLog(pszFormat);
-}
-
+void CC_DLL CCLuaLog(const char * pszFormat);
 
 /**
 @brief Pop out a message box
@@ -52,7 +53,7 @@ inline void CC_DLL CCLuaLog(const char * pszFormat)
 void CC_DLL CCMessageBox(const char * pszMsg, const char * pszTitle);
 
 /**
-@brief Enum the language type supportted now
+@brief Enum the language type supported now
 */
 typedef enum LanguageType
 {
@@ -62,9 +63,17 @@ typedef enum LanguageType
     kLanguageItalian,
     kLanguageGerman,
     kLanguageSpanish,
-    kLanguageRussian
+    kLanguageRussian,
+    kLanguageKorean,
+    kLanguageJapanese,
+    kLanguageHungarian,
+    kLanguagePortuguese,
+    kLanguageArabic
 } ccLanguageType;
 
-NS_CC_END;
+// end of platform group
+/// @}
 
-#endif	// __CC_COMMON_H__
+NS_CC_END
+
+#endif    // __CC_COMMON_H__

@@ -1,9 +1,9 @@
 //
-//  DemoAppDelegate.h
-//  Demo
+//  MonkeyJump2DAppDelegate.h
+//  MonkeyJump2D
 //
-//  Created by Andreas Löw on 11.01.12.
-//  Copyright codeandweb.de 2012. All rights reserved.
+//  Created by guanghui on 4/16/13.
+//  Copyright __MyCompanyName__ 2013. All rights reserved.
 //
 
 #ifndef  _APP_DELEGATE_H_
@@ -12,23 +12,19 @@
 #include "CCApplication.h"
 
 /**
-@brief	The cocos2d Application.
+@brief    The cocos2d Application.
 
 The reason for implement as private inheritance is to hide some interface call by CCDirector.
 */
 class  AppDelegate : private cocos2d::CCApplication
 {
 public:
-	AppDelegate();
-	virtual ~AppDelegate();
+    AppDelegate();
+    virtual ~AppDelegate();
+
 
     /**
-    @brief	Implement for initialize OpenGL instance, set source path, etc...
-    */
-    virtual bool initInstance();
-
-    /**
-    @brief	Implement CCDirector and CCScene init code here.
+    @brief    Implement CCDirector and CCScene init code here.
     @return true    Initialize success, app continue.
     @return false   Initialize failed, app terminate.
     */
