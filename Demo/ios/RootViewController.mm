@@ -1,9 +1,9 @@
 //
-//  DemoAppController.h
-//  Demo
+//  MonkeyJump2DAppController.h
+//  MonkeyJump2D
 //
-//  Created by Andreas Löw on 11.01.12.
-//  Copyright codeandweb.de 2012. All rights reserved.
+//  Created by guanghui on 4/16/13.
+//  Copyright __MyCompanyName__ 2013. All rights reserved.
 //
 
 #import "RootViewController.h"
@@ -34,12 +34,21 @@
 }
  
 */
-// Override to allow orientations other than the default landscape orientation.
+// Override to allow orientations other than the default portrait orientation.
+// This method is deprecated on ios6
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
-	return UIInterfaceOrientationIsLandscape( interfaceOrientation );
-    
-    // switch to this line if you want to set portrait view
-    // return UIInterfaceOrientationIsPortrait( interfaceOrientation );
+    return UIInterfaceOrientationIsPortrait( interfaceOrientation );
+}
+
+// For ios6, use supportedInterfaceOrientations & shouldAutorotate instead
+- (NSUInteger) supportedInterfaceOrientations{
+#ifdef __IPHONE_6_0
+    return UIInterfaceOrientationMaskPortrait;
+#endif
+}
+
+- (BOOL) shouldAutorotate {
+    return YES;
 }
 
 - (void)didReceiveMemoryWarning {

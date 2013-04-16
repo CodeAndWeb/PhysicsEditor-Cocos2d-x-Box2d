@@ -26,10 +26,7 @@ THE SOFTWARE.
 #define __CC_PLATFORM_CONFIG_H__
 
 /**
-Config of cocos2d-x project.
-
-There are config below:
-build for which target platform
+Config of cocos2d-x project, per target platform.
 */
 
 //////////////////////////////////////////////////////////////////////////
@@ -40,121 +37,72 @@ build for which target platform
 #define CC_PLATFORM_UNKNOWN            0
 #define CC_PLATFORM_IOS                1
 #define CC_PLATFORM_ANDROID            2
-#define CC_PLATFORM_WOPHONE            3
-#define CC_PLATFORM_WIN32              4
-#define CC_PLATFORM_AIRPLAY            5
-#define CC_PLATFORM_LINUX              7
-
+#define CC_PLATFORM_WIN32              3
+#define CC_PLATFORM_MARMALADE          4
+#define CC_PLATFORM_LINUX              5
 #define CC_PLATFORM_BADA               6
-// Determine tartet platform by compile environment macro.
+#define CC_PLATFORM_BLACKBERRY         7
+#define CC_PLATFORM_MAC                8
+#define CC_PLATFORM_NACL               9
+
+// Determine target platform by compile environment macro.
 #define CC_TARGET_PLATFORM             CC_PLATFORM_UNKNOWN
 
+// mac
+#if defined(CC_TARGET_OS_MAC)
+#undef  CC_TARGET_PLATFORM
+#define CC_TARGET_PLATFORM         CC_PLATFORM_MAC
+#endif
+
 // iphone
-#if ! CC_TARGET_PLATFORM && (defined(TARGET_OS_IPHONE) || defined(TARGET_IPHONE_SIMULATOR))
+#if defined(CC_TARGET_OS_IPHONE)
     #undef  CC_TARGET_PLATFORM
     #define CC_TARGET_PLATFORM         CC_PLATFORM_IOS
-    #define CC_SUPPORT_MULTITHREAD 0
-    #define CC_SUPPORT_UNICODE 0
     #define CC_SUPPORT_PVRTC
 #endif
 
 // android
-#if ! CC_TARGET_PLATFORM && defined(ANDROID)
+#if defined(ANDROID)
     #undef  CC_TARGET_PLATFORM
     #define CC_TARGET_PLATFORM         CC_PLATFORM_ANDROID
 #endif
 
-// wophone
-#if ! CC_TARGET_PLATFORM && defined(_TRANZDA_VM_)
-    #undef  CC_TARGET_PLATFORM
-    #define CC_TARGET_PLATFORM         CC_PLATFORM_WOPHONE
-#endif
-
 // win32
-#if ! CC_TARGET_PLATFORM && (defined(WIN32) && defined(_WINDOWS))
+#if defined(WIN32) && defined(_WINDOWS)
     #undef  CC_TARGET_PLATFORM
     #define CC_TARGET_PLATFORM         CC_PLATFORM_WIN32
-
-    #define CC_SUPPORT_MULTITHREAD     1
-    #if defined(UNICODE)
-        #define CC_SUPPORT_UNICODE     1
-    #else
-        #define CC_SUPPORT_UNICODE     0
-    #endif
 #endif
 
 // linux
-#if ! CC_TARGET_PLATFORM && defined(LINUX)
+#if defined(LINUX)
     #undef  CC_TARGET_PLATFORM
     #define CC_TARGET_PLATFORM         CC_PLATFORM_LINUX
 #endif
 
-// airplay
-#if ! CC_TARGET_PLATFORM && defined(AIRPLAY)
+// marmalade
+#if defined(MARMALADE)
 #undef  CC_TARGET_PLATFORM
-#define CC_TARGET_PLATFORM         CC_PLATFORM_AIRPLAY
+#define CC_TARGET_PLATFORM         CC_PLATFORM_MARMALADE
 #endif
+
 // bada
-#if ! CC_TARGET_PLATFORM && defined(SHP)
+#if defined(SHP)
 #undef  CC_TARGET_PLATFORM
 #define CC_TARGET_PLATFORM         CC_PLATFORM_BADA
 #endif
-//////////////////////////////////////////////////////////////////////////
-// user configure
-//////////////////////////////////////////////////////////////////////////
 
-// Check user assigned target platform.
-#if defined(CC_UNDER_IOS)
+// qnx
+#if defined(__QNX__)
     #undef  CC_TARGET_PLATFORM
-    #define CC_TARGET_PLATFORM         CC_PLATFORM_IOS
+    #define CC_TARGET_PLATFORM     CC_PLATFORM_BLACKBERRY
 #endif
 
-#if defined(CC_UNDER_ANDROID)
+// native client
+#if defined(__native_client__)
     #undef  CC_TARGET_PLATFORM
-    #define CC_TARGET_PLATFORM         CC_PLATFORM_ANDROID
+    #define CC_TARGET_PLATFORM     CC_PLATFORM_NACL
 #endif
 
-#if defined(CC_UNDER_WOPHONE)
-    #undef  CC_TARGET_PLATFORM
-    #define CC_TARGET_PLATFORM         CC_PLATFORM_WOPHONE
-#endif
-
-#if defined(CC_UNDER_WIN32)
-    #undef  CC_TARGET_PLATFORM
-    #define CC_TARGET_PLATFORM         CC_PLATFORM_WIN32
-#endif
-
-#if defined(CC_UNDER_AIRPLAY)
-#undef  CC_TARGET_PLATFORM
-#define CC_TARGET_PLATFORM			   CC_PLATFORM_AIRPLAY
-#endif
-#if defined(CC_UNDER_LINUX)
-#undef  CC_TARGET_PLATFORM
-#define CC_TARGET_PLATFORM			   CC_PLATFORM_LINUX
-#endif
-
-#if defined(CC_UNDER_BADA)
-#undef  CC_TARGET_PLATFORM
-#define CC_TARGET_PLATFORM			   CC_PLATFORM_BADA
-#endif
-
-// Check user assigned supportive of multi-thread
-#if defined(CC_ENABLE_MULTITHREAD)
-    #undef  CC_SUPPORT_MULTITHREAD
-    #define CC_SUPPORT_MULTITHREAD     1
-#elif defined(CC_DISABLE_MULTITHREAD)
-    #undef  CC_SUPPORT_MULTITHREAD
-    #define CC_SUPPORT_MULTITHREAD     0
-#endif
-
-// Check user assigned supportive of unicode
-#if defined(CC_ENABLE_UNICODE)
-#undef  CC_SUPPORT_UNICODE
-#define CC_SUPPORT_UNICODE             1
-#elif defined(CC_DISABLE_UNICODE)
-#undef  CC_SUPPORT_UNICODE
-#define CC_SUPPORT_UNICODE             0
-#endif
 
 //////////////////////////////////////////////////////////////////////////
 // post configure
@@ -162,18 +110,9 @@ build for which target platform
 
 // check user set platform
 #if ! CC_TARGET_PLATFORM
-    #error  "Can not recognize the target platform, compling under a unsupported platform?"
+    #error  "Cannot recognize the target platform; are you targeting an unsupported platform?"
 #endif 
 
-// cocos2d-x havn't support multi-thread yet
-#undef  CC_SUPPORT_MULTITHREAD
-#define CC_SUPPORT_MULTITHREAD         0
-
-// cocos2d-x havn't support unicode yet
-#undef  CC_SUPPORT_UNICODE
-#define CC_SUPPORT_UNICODE             0
-
-// Check the supportive of platform
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 #pragma warning (disable:4127)  
 #endif  // CC_PLATFORM_WIN32
