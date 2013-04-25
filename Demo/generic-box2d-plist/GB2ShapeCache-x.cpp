@@ -83,6 +83,8 @@ GB2ShapeCache* GB2ShapeCache::sharedGB2ShapeCache(void) {
 }
 
 bool GB2ShapeCache::init() {
+    _fixtureIDArray = CCArray::create();
+    _fixtureIDArray->retain();
 	return true;
 }
 
@@ -92,6 +94,8 @@ void GB2ShapeCache::reset() {
 		delete iter->second;
 	}
 	shapeObjects.clear();
+    
+    _fixtureIDArray->removeAllObjects();
 }
 
 void GB2ShapeCache::addFixturesToBody(b2Body *body, const std::string &shape) {
@@ -117,7 +121,7 @@ cocos2d::CCPoint GB2ShapeCache::anchorPointForShape(const std::string &shape) {
 
 
 void GB2ShapeCache::addShapesWithFile(const std::string &plist) {
-    
+    this->reset();
 	//const char *fullName = CCFileUtils::sharedFileUtils()->fullPathForFilename(plist.c_str()).c_str();
     
     CCDictionary *dict = CCDictionary::createWithContentsOfFile(plist.c_str());
@@ -172,7 +176,11 @@ void GB2ShapeCache::addShapesWithFile(const std::string &plist) {
             basicData.restitution = static_cast<CCString *>(fixtureData->objectForKey("restitution"))->floatValue();
             
             basicData.isSensor = (bool)static_cast<CCString *>(fixtureData->objectForKey("isSensor"))->intValue();
-           
+            
+            CCString *idStr = static_cast<CCString*>(fixtureData->objectForKey("id"));
+            _fixtureIDArray->addObject(idStr);
+            basicData.userData = idStr;
+                       
             CCString *cb = static_cast<CCString *>(fixtureData->objectForKey("userdataCbValue"));
             
             int callbackData = 0;

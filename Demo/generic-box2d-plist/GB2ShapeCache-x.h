@@ -60,6 +60,7 @@ namespace cocos2d {
 		std::map<std::string, BodyDef *> shapeObjects;
 		GB2ShapeCache(void) {}
 		float ptmRatio;
+        CCArray *_fixtureIDArray;
 	};
 }
 
